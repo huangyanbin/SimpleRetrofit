@@ -8,7 +8,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/CacheOkhttp" />
+            <option value="$PROJECT_DIR$/GsonAdapter" />
+            <option value="$PROJECT_DIR$/Retrofit" />
+            <option value="$PROJECT_DIR$/RxConverter" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

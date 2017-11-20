@@ -1,0 +1,9 @@
+apply plugin: 'java-library'
+
+dependencies {
+    compile 'com.google.code.gson:gson:2.8.0'
+    implementation project(':Retrofit')
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"

@@ -6,14 +6,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 
+import com.bin.david.adapter.GsonCallAdapterFactory;
 import com.bin.david.cacheokhttp.Retrofit;
-import com.bin.david.cacheokhttp.converter.RxConverterFactory;
 import com.bin.david.cacheokhttp.core.Callback;
+import com.bin.david.converter.RxConverterFactory;
 import com.bin.david.form.core.SmartTable;
 import com.bin.david.form.data.style.FontStyle;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,6 +24,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Created by huang on 2017/11/16.
@@ -35,16 +41,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         smartTable = findViewById(R.id.smartTable);
         FontStyle.setDefaultTextSpSize(this,15);
-       // startBaseRetrofit();
+        startBaseRetrofit();
         startRxRetrofit();
 
     }
 
     private void startRxRetrofit(){
+        HttpLoggingInterceptor interceptor =  new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
         Retrofit retrofit = new Retrofit.Builder().setBaseUrl("http://www.pm25.in/api/")
-                .setClient(new OkHttpClient())
+                .setClient(client)
+                .setCallAdapterFactory(new GsonCallAdapterFactory())
                 .setConverterFactory(new RxConverterFactory()).build();
-        retrofit.create(RxAPIService.class).getWeather("querys","上海","5j1znBVAsnSf5xQyNQyq&avg")
+        Map<String,String> params = new HashMap<>();
+        params.put("city","上海");
+        params.put("token","5j1znBVAsnSf5xQyNQyq&avg");
+        retrofit.create(RxAPIService.class).getWeather("querys",params)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<PM25>>() {
@@ -74,18 +87,19 @@ public class MainActivity extends AppCompatActivity {
      * 基于OkHttp cell
      */
     private void startBaseRetrofit() {
+        HttpLoggingInterceptor interceptor =  new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
         Retrofit retrofit = new Retrofit.Builder().setBaseUrl("http://www.pm25.in/api/")
-                .setClient(new OkHttpClient()).build();
+                .setClient(client).build();
         retrofit.create(APIService.class).getWeather("querys","上海","5j1znBVAsnSf5xQyNQyq&avg")
-                .enqueue(new Callback<List<PM25>>() {
+                .enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call call, final List<PM25> response) {
-                       runOnUiThread(new Runnable() {
-                           @Override
-                           public void run() {
-                               smartTable.setData(response);
-                           }
-                       });
+                    public void onResponse(Call call, ResponseBody body) throws IOException {
+                        if(body != null) {
+                            String respStr = body.string();
+                            Log.e("huang","resp"+respStr);
+                        }
                     }
 
                     @Override

@@ -1,11 +1,11 @@
 ## Retrofit简易版本
 
 ---
-> **为啥要写这个？**
+#### **为啥要写这个？**
 
-> 之前一直使用```OKHttp```，之前修改过鸿洋的```OKhttpUtils```增加了缓存功能。但对```Retrofit```并没有使用过，前几天按网上例子用了，感觉确实简约多了。总觉得```Retrofit```就是个注解版```OKHttp```，应该写个简易版本很容易，就是个编译时注解呗。于是没看源码写个简单版本。现在已经可以集合```Rxjava```。我试图去想```Retrofit```作者是咋写的。肯定有人说又造重复的轮子，放心，写完我也不用，因为真的只是demo，只是为了增加自己编程的能力。
+> 之前一直使用```OKHttp```，之前修改过鸿洋的```OKhttpUtils```增加了缓存功能。但对```Retrofit```并没有使用过，前几天按网上例子用了，感觉确实简约多了。总觉得```Retrofit```就是个注解版```OKHttp```，应该写个简易版本很容易，就是个编译时注解呗。于是没看源码写个简单版本。现在已经可以集合```Rxjava```,```Gson```。我试图去想```Retrofit```作者是咋写的。肯定有人说又造重复的轮子，放心，写完我也不用，因为真的只是demo，只是为了增加自己编程的能力。
 
-> **咋开始呢？**
+####  **咋开始呢？**
 
 > 我想着边写边改，于是我首先建了个```module```写了```Get```注解类，用于等下解析用。
 
@@ -31,7 +31,7 @@ public @interface Get {
 ```
 compile 'com.google.auto.service:auto-service:1.0-rc3'
 
-```
+``` 
 > 在```HttpProcessor```类上增加注解
 
 ```
@@ -48,7 +48,7 @@ org.gradle.jvmargs=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address
 
 
 
-> **第一步**
+####  **第一步**
 
 > 使用```Retrofit```我们一般都是新建接口，然后写个抽象方法，类似下面的。
 
@@ -57,7 +57,7 @@ org.gradle.jvmargs=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address
     Call<List<PM25>> getWeather(@Path("query") String query, @Query("city")String city,@Query("token")String token);
 ```
 
-或者这样
+> 或者这样
 
 ```
  @Get("{query}/pm10.json")
@@ -125,7 +125,7 @@ org.gradle.jvmargs=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address
     //将方法加入annotatedClass类
      annotatedClass.addMethod(annotatedMethod);
      onNote("retrofit build ---"+element.getSimpleName()+"--- method", e);
-
+     
 ```
 
 > 迭代出来调用生成```AnnotatedClass```代码：
@@ -138,7 +138,7 @@ org.gradle.jvmargs=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address
         }
 ```
 
-> **如何生成代码（核心）**
+####  **如何生成代码（核心）**
 
 > TypeSpec就是用于生成类信息的，采用Build方式来完成。
 
@@ -146,17 +146,17 @@ org.gradle.jvmargs=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address
  public void generateCode(Elements elementUtils, Filer filer) {
         //获取接口名
         TypeName classType = TypeName.get(classElement.asType());
-
+        
         TypeSpec.Builder typeBuilder =
         //类名 接口名+imp imp随便写的。
         TypeSpec.classBuilder(className+"Imp")
         //类访问权限
                     .addModifiers(Modifier.PUBLIC)
-        //接口 实现我们包含Get注解的接口
+        //接口 实现我们包含Get注解的接口            
                     .addSuperinterface(classType)
                     //继承APIService类 ，这个类主要是辅助完成很多工作，等下会介绍
                     .superclass(APIService.class);
-        //迭代生成方法代码
+        //迭代生成方法代码            
         for (int i = 0;i < methods.size();i++) {
             AnnotatedMethod m = methods.get(i);
             MethodSpec methodSpec = m.generateMethodSpec();
@@ -200,7 +200,7 @@ public MethodSpec generateMethodSpec() {
                 .methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(returnType);
-        //通过拼接可以得到对应method类，用于请求后由于泛型擦除导致无法得到Type
+        //通过拼接可以得到对应method类，用于请求后由于泛型擦除导致无法得到Type      
         StringBuffer methodFieldStr = new StringBuffer(" $T method = this.getClass().getMethod(\"" + methodName + "\"");
         //迭代参数
         for (int i = 0; i < params.size(); i++) {
@@ -238,7 +238,7 @@ public MethodSpec generateMethodSpec() {
             methodBuilder.addStatement("url =  url.replaceAll(\"\\\\{$N\\\\}\",$N)"
                     , entry.getKey(), entry.getValue());
         }
-
+      
         String returnTypeName = returnType.toString();
           //获取返回类型的泛型
         String generic = returnTypeName.substring(returnTypeName.indexOf("<"));
@@ -275,7 +275,7 @@ public MethodSpec generateMethodSpec() {
 ```
 
 
-> 设置```head```
+> 设置```head``` 
 
 ```
  public void setHead(ExecutableElement methodElement, MethodSpec.Builder methodBuilder) {
@@ -363,10 +363,9 @@ public interface ICallAdapterFactory {
 ```
 
 
-# 未完待续
+####  未完待续
 
-> **总结**
-
->   用了两天时间写这个思路实现，感觉这个最难的就是泛型，因为泛型会编译之后会被擦除，最后投机取巧了，用方法获取泛型，然后将泛型Type传给Callback。还有其他```Put```和```Delete```请求就不写了。取一反三而已，还可以自定义```IConverterFactory```和```ICallAdapterFactory```.当然真正的```Retrofit```比我写的复杂多了。后续有时间把多种缓存```http cache```功能加上。
-
-
+####  **总结**
+  
+>   用了两天时间写这个思路实现，感觉这个最难的就是泛型，因为泛型会编译之后会被擦除，最后投机取巧了，用方法获取泛型，然后将泛型```Type```传给```Callback```。完成了```Get```, ```Post```,```Path``` ```Query```,```QuertMap```,```Head```注解,其他```Put```和```Delete```等请求就不写了。取一反三而已，还可以自定义```IConverterFactory```和```ICallAdapterFactory```.当然真正的```Retrofit```比我写的复杂多了。后续有时间把多种缓存```http cache```功能加上。
+>

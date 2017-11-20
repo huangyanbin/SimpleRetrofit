@@ -60,7 +60,7 @@ public class APIService {
         this.converterFactory = converterFactory;
     }
 
-    public Type getTypeByClassName(String className){
+ /*   public Type getTypeByClassName(String className){
         try {
             Class<?> clazz = Class.forName(className);
             return clazz;
@@ -68,7 +68,7 @@ public class APIService {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
     protected void setCallGenericReturnType(Method method,Call<?> call){
         Type type = method.getGenericReturnType();

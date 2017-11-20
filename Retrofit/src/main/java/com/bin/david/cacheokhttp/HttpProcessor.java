@@ -51,8 +51,11 @@ public class HttpProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnv) {
+        //获取到所有的Get注解
         Set<? extends Element> getSet = roundEnv.getElementsAnnotatedWith(Get.class);
+        //获取到所有Post注解
         Set<? extends Element> postSet = roundEnv.getElementsAnnotatedWith(Post.class);
+        //放入新的Set集合里面
         HashSet<Element> allSet = new HashSet<>();
         allSet.addAll(getSet);
         allSet.addAll(postSet);

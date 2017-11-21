@@ -3,10 +3,15 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GsonAdapter/GsonAdapter.iml" filepath="$PROJECT_DIR$/GsonAdapter/GsonAdapter.iml" />
+      <module fileurl="file://C:\Users\huang\Documents\SimpleRetrofit-master\GsonAdapter\GsonAdapter.iml" filepath="C:\Users\huang\Documents\SimpleRetrofit-master\GsonAdapter\GsonAdapter.iml" />
       <module fileurl="file://$PROJECT_DIR$/Retrofit/Retrofit.iml" filepath="$PROJECT_DIR$/Retrofit/Retrofit.iml" />
-      <module fileurl="file://$PROJECT_DIR$/RxCacheOkttp.iml" filepath="$PROJECT_DIR$/RxCacheOkttp.iml" />
+      <module fileurl="file://C:\Users\huang\Documents\SimpleRetrofit-master\Retrofit\Retrofit.iml" filepath="C:\Users\huang\Documents\SimpleRetrofit-master\Retrofit\Retrofit.iml" />
+      <module fileurl="file://C:\Users\huang\Documents\SimpleRetrofit-master\RxCacheOkttp.iml" filepath="C:\Users\huang\Documents\SimpleRetrofit-master\RxCacheOkttp.iml" />
       <module fileurl="file://$PROJECT_DIR$/RxConverter/RxConverter.iml" filepath="$PROJECT_DIR$/RxConverter/RxConverter.iml" />
+      <module fileurl="file://C:\Users\huang\Documents\SimpleRetrofit-master\RxConverter\RxConverter.iml" filepath="C:\Users\huang\Documents\SimpleRetrofit-master\RxConverter\RxConverter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimpleRetrofit-master.iml" filepath="$PROJECT_DIR$/SimpleRetrofit-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\huang\Documents\SimpleRetrofit-master\app\app.iml" filepath="C:\Users\huang\Documents\SimpleRetrofit-master\app\app.iml" />
     </modules>
   </component>
 </project>

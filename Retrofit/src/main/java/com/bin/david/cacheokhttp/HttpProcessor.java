@@ -1,5 +1,6 @@
 package com.bin.david.cacheokhttp;
 
+import com.bin.david.cacheokhttp.annotation.Http;
 import com.bin.david.cacheokhttp.annotation.Post;
 import com.bin.david.cacheokhttp.parse.AnnotatedMethod;
 import com.bin.david.cacheokhttp.annotation.Get;
@@ -56,9 +57,11 @@ public class HttpProcessor extends AbstractProcessor {
         //获取到所有Post注解
         Set<? extends Element> postSet = roundEnv.getElementsAnnotatedWith(Post.class);
         //放入新的Set集合里面
+        Set<? extends Element> httpSet = roundEnv.getElementsAnnotatedWith(Http.class);
         HashSet<Element> allSet = new HashSet<>();
         allSet.addAll(getSet);
         allSet.addAll(postSet);
+        allSet.addAll(httpSet);
         for (Element e : allSet) {
             if (e.getKind() != ElementKind.METHOD) {
                 onError("Builder annotation can only be applied to method", e);
@@ -107,6 +110,10 @@ public class HttpProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        return Collections.singleton(Get.class.getCanonicalName());
+        Set<String> set = new HashSet<>();
+        set.add(Get.class.getCanonicalName());
+        set.add(Post.class.getCanonicalName());
+        set.add(Http.class.getCanonicalName());
+        return set;
     }
 }

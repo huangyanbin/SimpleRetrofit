@@ -1,6 +1,7 @@
 package com.bin.david.cacheokhttp.parse;
 
 import com.bin.david.cacheokhttp.annotation.Get;
+import com.bin.david.cacheokhttp.annotation.Http;
 import com.bin.david.cacheokhttp.annotation.Path;
 import com.bin.david.cacheokhttp.annotation.Post;
 import com.bin.david.cacheokhttp.annotation.Query;
@@ -74,6 +75,8 @@ public class AnnotatedMethod {
             return new GetParse();
         if (methodElement.getAnnotation(Post.class) != null)
             return new PostParse();
+        if(methodElement.getAnnotation(Http.class) !=null)
+            return new HttpParse();
         return null;
     }
 

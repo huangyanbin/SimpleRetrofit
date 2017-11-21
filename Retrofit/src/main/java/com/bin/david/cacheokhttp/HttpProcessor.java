@@ -58,11 +58,11 @@ public class HttpProcessor extends AbstractProcessor {
         Set<? extends Element> postSet = roundEnv.getElementsAnnotatedWith(Post.class);
         //放入新的Set集合里面
         Set<? extends Element> httpSet = roundEnv.getElementsAnnotatedWith(Http.class);
-        HashSet<Element> allSet = new HashSet<>();
-        allSet.addAll(getSet);
-        allSet.addAll(postSet);
-        allSet.addAll(httpSet);
-        for (Element e : allSet) {
+        HashSet<Element> allAnnotationSet = new HashSet<>();
+        allAnnotationSet.addAll(getSet);
+        allAnnotationSet.addAll(postSet);
+        allAnnotationSet.addAll(httpSet);
+        for (Element e : allAnnotationSet) {
             if (e.getKind() != ElementKind.METHOD) {
                 onError("Builder annotation can only be applied to method", e);
                 return false;
